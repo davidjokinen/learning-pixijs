@@ -1,0 +1,18 @@
+{
+  "name": "learning-pixi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "http-server": "^0.11.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "npm install && http-server ./examples"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Texture Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
+  </head>
+  <body style="margin: 0px;">
+    <script>
+      var app = new PIXI.Application(1400, 800, {backgroundColor : 0x1099bb});
+      document.body.appendChild(app.view);
+
+      var container = new PIXI.Container();
+      var graphics = new PIXI.Graphics();
+      //app.stage.addChild(container);
+
+      var texture = PIXI.Texture.fromImage('/images/bunny.png');
+      let bunnyList = [];
+      for (var i = 0; i < 100; i++) {
+          var bunny = new PIXI.Sprite(texture);
+          bunny.x = (i % 5) * 30;
+          bunny.y = Math.floor(i / 5) * 30;
+          //bunny.rotation = 0;Math.random() * (Math.PI * 2)
+          container.addChild(bunny);
+          bunnyList.push(bunny);
+      }
+
+      var brt = new PIXI.BaseRenderTexture(256, 256, PIXI.SCALE_MODES.LINEAR, 1);
+      var rt = new PIXI.RenderTexture(brt);
+
+
+      for(let x=0;x<7;x++)
+        for(let y=0;y<5;y++){
+          var sprite = new PIXI.Sprite(rt);
+          
+          sprite.x = x*210-100;
+          sprite.y = y*200-100;
+          //sprite.rotation = Math.random() * (Math.PI * 2)
+          app.stage.addChild(sprite);
+        }
+      
+      /*
+      * All the bunnies are added to the container with the addChild method
+      * when you do this, all the bunnies become children of the container, and when a container moves,
+      * so do all its children.
+      * This gives you a lot of flexibility and makes it easier to position elements on the screen
+      */
+      container.x = 100;
+      container.y = 60;
+      count = 0;
+      subTest = 64;
+      function test() {
+        graphics.beginFill(0xCCCCCC, 1);
+        
+        for(let i=0;i<30;i++) {
+          let size = ~~(Math.random()*3+1)
+          graphics.drawRect(~~(Math.random()*210), ~~(Math.random()*200), size, size);
+        }
+        graphics.beginFill(0x1099bb, 1);
+        if (Math.random() > .7) {
+          let size = ~~(Math.random()*30+5)
+          let x = ~~(Math.random()*240-30);
+          let y = ~~(Math.random()*240-30);
+          // graphics.moveTo(x, y)
+          //   .lineTo(x+size, y)
+          //   .lineTo(x+size, y+size)
+          //   .lineTo(x, y+size)
+          //   .addHole();
+          graphics.drawRect(~~(Math.random()*210), ~~(Math.random()*200), size, size);
+          //graphics
+        }
+          
+        app.renderer.render(graphics, rt);
+      }
+
+      app.ticker.add(function() {
+        count++;
+        test()
+      });
+    </script>
+  </body>
+</html>

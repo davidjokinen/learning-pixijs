@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Texture Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
+  </head>
+  <body style="margin: 0px;">
+    <script>
+      var app = new PIXI.Application(800, 600, {backgroundColor : 0x1099bb});
+      document.body.appendChild(app.view);
+
+      var container = new PIXI.Container();
+      //app.stage.addChild(container);
+
+      var texture = PIXI.Texture.fromImage('/images/bunny.png');
+      let bunnyList = [];
+      for (var i = 0; i < 100; i++) {
+          var bunny = new PIXI.Sprite(texture);
+          bunny.x = (i % 5) * 30;
+          bunny.y = Math.floor(i / 5) * 30;
+          //bunny.rotation = 0;Math.random() * (Math.PI * 2)
+          container.addChild(bunny);
+          bunnyList.push(bunny);
+      }
+
+      var brt = new PIXI.BaseRenderTexture(256, 256, PIXI.SCALE_MODES.LINEAR, 1);
+      var rt = new PIXI.RenderTexture(brt);
+
+
+      for(let x=0;x<5;x++)
+        for(let y=0;y<5;y++){
+          var sprite = new PIXI.Sprite(rt);
+          
+          sprite.x = x*210-100;
+          sprite.y = y*200-100;
+          app.stage.addChild(sprite);
+        }
+      
+      /*
+      * All the bunnies are added to the container with the addChild method
+      * when you do this, all the bunnies become children of the container, and when a container moves,
+      * so do all its children.
+      * This gives you a lot of flexibility and makes it easier to position elements on the screen
+      */
+      container.x = 100;
+      container.y = 60;
+      count = 0;
+      subTest = 64;
+      function test() {
+        for (var i = 0; i < 100; i++) {
+          let add = 0;
+          let addX = 0;
+          add = Math.sin(((i % 10) + Math.floor(i / 10) + (count ))*.80);
+          if (Math.floor(i / 10) %2==1)
+            addX =10
+          bunnyList[i].x = (i % 10) * 20-20+addX - subTest;
+          bunnyList[i].y = Math.floor(i / 10) * 20+add +10- subTest;
+          //bunnyList[i].rotation = count/30
+        }
+        app.renderer.render(container, rt);
+      }
+
+      app.ticker.add(function() {
+        count++;
+        test()
+      });
+    </script>
+  </body>
+</html>
